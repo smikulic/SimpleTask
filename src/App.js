@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
-//import Navigation from './components/navigation';
+import Navigation from './components/navigation';
 
 const theme = createMuiTheme({
   palette: {
@@ -16,7 +16,7 @@ class App extends Component {
         {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
         <CssBaseline />
         <div className="app-wrapper">
-          {/* <Navigation /> */}
+          <Navigation />
           {this.props.children}
         </div>
       </MuiThemeProvider>
