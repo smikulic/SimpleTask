@@ -4,22 +4,26 @@ import { withStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
-import { RootStyle } from '../../lib/styles';
+import { RootStyle, primaryColor } from '../../lib/styles';
 
-const styles = {
+const styles = theme => ({
   root: RootStyle,
   flex: {
     flex: 1,
   },
   name: {
-    color: '#2EA6EF',
+    color: primaryColor,
     fontWeight: '600',
   },
   user: {
     float: 'right',
     fontSize: '0.9rem',
+    color: theme.palette.text.secondary,
   },
-};
+  appBar: {
+    backgroundColor: 'white',
+  },
+});
 
 class Navigation extends Component {
   render() {
@@ -27,7 +31,7 @@ class Navigation extends Component {
 
     return (
       <div className={classes.root}>
-        <AppBar position="static" color="default">
+        <AppBar position="static" className={classes.appBar}>
           <Toolbar>
             <Typography variant="title" color="inherit" className={classes.flex}>
               <span className={classes.name}>SimpleTask</span>
