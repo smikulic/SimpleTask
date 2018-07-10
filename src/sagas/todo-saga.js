@@ -8,6 +8,7 @@ import {
   todoIndexLoadSuccess,
   todoIndexLoadFail,
   todoCreateFail,
+  todoUpdateFail,
 } from '../redux/actions/todo-actions';
 import { responseTodosMock } from '../redux-test-helper';
 
@@ -36,7 +37,7 @@ export function* createTodo(payload) {
     currentTodos.data.push(payload);
     window.localStorage.setItem('simple_todos', JSON.stringify(currentTodos));
     const response = currentTodos;
-     yield put(todoIndexLoadSuccess(response.data));
+    yield put(todoIndexLoadSuccess(response.data));
   } catch (e) {
     yield put(todoCreateFail(e.message));
   }
@@ -47,6 +48,35 @@ export function* listenToCreateTodo() {
     const { payload } = yield take('todo/CREATE');
     if (payload) {
       yield call(createTodo, payload);
+    }
+  }
+}
+
+// UPDATE
+export function* updateTodo(payload) {
+  try {
+    let currentTodos = JSON.parse(window.localStorage.getItem('simple_todos'));
+    let updatedTodos = { data: [] };
+
+    currentTodos.data.forEach(todo => {
+      let updatedTodo;
+      todo.id === payload.id ? updatedTodo = payload : updatedTodo = todo;
+      updatedTodos.data.push(updatedTodo);
+    });
+    
+    window.localStorage.setItem('simple_todos', JSON.stringify(updatedTodos));
+    const response = updatedTodos;
+    yield put(todoIndexLoadSuccess(response.data));
+  } catch (e) {
+    yield put(todoUpdateFail(e.message));
+  }
+}
+
+export function* listenToUpdateTodo() {
+  while (true) {
+    const { payload } = yield take('todo/UPDATE');
+    if (payload) {
+      yield call(updateTodo, payload);
     }
   }
 }

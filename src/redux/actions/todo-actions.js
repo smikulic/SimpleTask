@@ -28,3 +28,19 @@ export const todoCreateFail = (message) => ({
   type: 'todo/CREATE_FAIL',
   message,
 })
+
+// UPDATE
+export const todoUpdate = (payload) => ({
+  type: 'todo/UPDATE',
+  payload,
+})
+
+export const todoUpdateSuccess = (message) => ({
+  type: 'todo/UPDATE_SUCCESS',
+  message,
+})
+
+export const todoUpdateFail = (message) => ({
+  type: 'todo/UPDATE_FAIL',
+  message,
+})

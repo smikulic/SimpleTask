@@ -5,6 +5,7 @@ import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import AddIcon from '@material-ui/icons/Add';
+import TaskOverview from '../../components/task-overview';
 import {
   hoverSectionColor,
   secondaryColor,
@@ -12,7 +13,6 @@ import {
   alertColor,
   textColor,
   hoverPointer,
-  headingStyle,
 } from '../../lib/styles';
 
 const styles = theme => ({
@@ -20,7 +20,6 @@ const styles = theme => ({
     flexGrow: 1,
     padding: 20,
   },
-  heading: headingStyle,
   todoTitle: {
     flex: 1,
     marginTop: '0.5rem',
@@ -33,16 +32,6 @@ const styles = theme => ({
     color: theme.palette.text.secondary,
     height: 100,
     position: 'relative',
-  },
-  overviewStatusActive: {
-    padding: theme.spacing.unit * 2,
-    color: 'white',
-    backgroundColor: primaryColor,
-  },
-  overviewStatusCompleted: {
-    padding: theme.spacing.unit * 2,
-    color: 'white',
-    backgroundColor: secondaryColor,
   },
   completed: {
     color: secondaryColor,
@@ -123,6 +112,7 @@ class TodosPage extends Component {
   constructor() {
     super();
 
+    this.handleTodoComplete = this.handleTodoComplete.bind(this);
     this.handleTodoSubmit = this.handleTodoSubmit.bind(this);
     this.handleShowTodoSection = this.handleShowTodoSection.bind(this);
     this.handleOnTodoMouseEnter = this.handleOnTodoMouseEnter.bind(this);
@@ -151,38 +141,42 @@ class TodosPage extends Component {
     this.props.todoCreate(newTodo);
   }
 
-  handleOnTodoMouseEnter(todo) {
+  handleTodoComplete(todo) {
+    const updatedTodo = {
+      ...todo,
+      completed: true,
+    };
+    this.props.todoUpdate(updatedTodo);
+  }
+
+  handleTodoUndo(todo) {
+    const updatedTodo = {
+      ...todo,
+      completed: false,
+    };
+    this.props.todoUpdate(updatedTodo);
+  }
+
+  handleOnTodoMouseEnter(todoId) {
     this.setState({
       todoSectionActive: false,
-      todoHoverSectionActive: todo,
+      todoHoverSectionActive: todoId,
     });
   }
 
   handleOnTodoMouseLeave() {
-    //this.setState({ todoHoverSectionActive: undefined });
+    this.setState({ todoHoverSectionActive: undefined });
   }
 
   onNameChange = event => this.setState({ name: event.target.value });
 
   render() {
     const { classes, todos } = this.props;
-    let active = 0;
-
-    todos.forEach(todo => !todo.completed ? active++ : undefined);
-
-    const activeTasksMessage = active ? `You have ${active} active tasks` : 'Well done!'
-    const overviewStatusStyle = active ? classes.overviewStatusActive : classes.overviewStatusCompleted;
 
     return (
       <div className={classes.root}>
         <Grid container spacing={24}>
-          <Grid item xs={12}>
-            <Typography variant="display1" color="inherit" className={classes.heading}>Your tasks</Typography>
-            <Paper className={overviewStatusStyle}>
-              <Typography variant="title" color="inherit" className={classes.heading}>Complete all tasks</Typography>
-              <Typography variant="subheading" color="inherit" className={classes.heading}>{activeTasksMessage}</Typography>
-            </Paper>
-          </Grid>
+          <TaskOverview todos={todos} />
           { todos &&
             todos.map(todo => {
               return (
@@ -205,6 +199,7 @@ class TodosPage extends Component {
                         { todo.completed && (
                           <div
                             className={classes.undoTask}
+                            onClick={this.handleTodoUndo.bind(this, todo)}
                           >
                             <span className={classes.hoverPointer}>Undo</span>
                           </div>
@@ -212,6 +207,7 @@ class TodosPage extends Component {
                         { !todo.completed && (
                           <div
                             className={classes.completeTask}
+                            onClick={this.handleTodoComplete.bind(this, todo)}
                           >
                             <span className={classes.hoverPointer}>Complete</span>
                           </div>
@@ -270,6 +266,7 @@ TodosPage.propTypes = {
   classes: PropTypes.object.isRequired,
   todos: PropTypes.array.isRequired,
   todoCreate: PropTypes.func.isRequired,
+  todoUpdate: PropTypes.func.isRequired,
 };
 
 export default withStyles(styles)(TodosPage);
