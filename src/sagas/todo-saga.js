@@ -63,7 +63,7 @@ export function* updateTodo(payload) {
       todo.id === payload.id ? updatedTodo = payload : updatedTodo = todo;
       updatedTodos.data.push(updatedTodo);
     });
-    
+
     window.localStorage.setItem('simple_todos', JSON.stringify(updatedTodos));
     const response = updatedTodos;
     yield put(todoIndexLoadSuccess(response.data));

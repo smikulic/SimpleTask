@@ -3,7 +3,7 @@ import {
   todoCreate,
   todoUpdate,
 } from '../actions/todo-actions';
-import TodoIndexPage from '../../pages/todo-index-page';
+import TaskIndexPage from '../../pages/task-index-page';
 
 const mapStateToProps = state => ({
   todos: state.appState.todos,
@@ -14,4 +14,4 @@ const mapDispatchToProps = dispatch => ({
   todoUpdate: params => dispatch(todoUpdate(params)),
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(TodoIndexPage);
+export default connect(mapStateToProps, mapDispatchToProps)(TaskIndexPage);

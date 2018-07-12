@@ -1,3 +1,9 @@
+export const primaryColor = '#2EA6EF';
+export const secondaryColor = '#35C675';
+export const textColor = '#6C7D86';
+export const hoverSectionColor = '#274759';
+export const alertColor = '#F0684F';
+
 export const RootStyle = {
   flexGrow: 1,
 }
@@ -9,11 +15,7 @@ export const PaperStyle = theme => ({
   color: theme.palette.text.secondary,
 });
 
-export const TitleStyle = theme => ({
-  margin: `${theme.spacing.unit * 4}px 0 ${theme.spacing.unit * 2}px`,
-});
-
-export const hoverPointer = {
+export const hoverPointerStyle = {
   cursor: 'pointer',
 };
 
@@ -23,8 +25,26 @@ export const headingStyle = {
   marginBottom: '0.5rem',
 };
 
-export const primaryColor = '#2EA6EF';
-export const secondaryColor = '#35C675';
-export const textColor = '#6C7D86';
-export const hoverSectionColor = '#274759';
-export const alertColor = '#F0684F';
+export const inputStyle = theme => ({
+  border: 0,
+  outline: 0,
+  padding: theme.spacing.unit,
+  fontSize: '0.9rem',
+  width: '80%',
+});
+
+export const buttonActionStyle = color => ({
+  display: 'inline-block',
+  textAlign: 'center',
+  width: '50%',
+  height: '30px',
+  borderRight: '1px solid white',
+  color,
+});
+
+export const submitButtonStyle = {
+  color: primaryColor,
+  fontSize: '1rem',
+  fontWeight: '600',
+  cursor: 'pointer',
+};
