@@ -106,31 +106,46 @@ const styles = theme => ({
     width: '50%',
   },
   hoverPointer: hoverPointer,
+  todoEditSection: {
+    backgroundColor: 'white',
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,
+    height: '100%',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
 });
 
 class TodosPage extends Component {
   constructor() {
     super();
 
+    this.handleTodoEdit = this.handleTodoEdit.bind(this);
     this.handleTodoComplete = this.handleTodoComplete.bind(this);
     this.handleTodoSubmit = this.handleTodoSubmit.bind(this);
+    this.handleTodoEditSubmit = this.handleTodoEditSubmit.bind(this);
     this.handleShowTodoSection = this.handleShowTodoSection.bind(this);
     this.handleOnTodoMouseEnter = this.handleOnTodoMouseEnter.bind(this);
     this.handleOnTodoMouseLeave = this.handleOnTodoMouseLeave.bind(this);
 
     this.state = {
-      todoSectionActive: false,
+      todoNewSectionActive: false,
+      todoEditSectionActive: undefined,
       todoHoverSectionActive: undefined,
       name: '',
     }
   }
 
   handleShowTodoSection() {
-    this.setState({ todoSectionActive: true });
+    this.setState({ todoNewSectionActive: true });
   }
   
   handleTodoSubmit() {
-    this.setState({ todoSectionActive: false });
+    this.setState({ todoNewSectionActive: false });
     
     const newTodo = {
       id: this.props.todos.length + 1,
@@ -139,6 +154,18 @@ class TodosPage extends Component {
     };
 
     this.props.todoCreate(newTodo);
+  }
+
+  handleTodoEditSubmit(todo) {
+    this.setState({ todoEditSectionActive: false });
+    
+    const updatedTodo = {
+      id: todo.id,
+      name: this.state.name,
+      completed: todo.completed,
+    };
+
+    this.props.todoUpdate(updatedTodo);
   }
 
   handleTodoComplete(todo) {
@@ -159,8 +186,17 @@ class TodosPage extends Component {
 
   handleOnTodoMouseEnter(todoId) {
     this.setState({
-      todoSectionActive: false,
+      todoNewSectionActive: false,
       todoHoverSectionActive: todoId,
+    });
+  }
+
+  handleTodoEdit(todo) {
+    this.setState({ todoEditSectionActive: true });
+    this.setState({
+      todoNewSectionActive: false,
+      name: todo.name,
+      todoEditSectionActive: todo.id,
     });
   }
 
@@ -194,7 +230,7 @@ class TodosPage extends Component {
                         <Typography variant="body2" className={classes.active}>Active</Typography>
                       )
                     }
-                    { this.state.todoHoverSectionActive === todo.id && (
+                    { this.state.todoHoverSectionActive === todo.id && !this.state.todoEditSectionActive && (
                       <Typography variant="body2" className={classes.todoHoverSection}>
                         { todo.completed && (
                           <div
@@ -214,10 +250,28 @@ class TodosPage extends Component {
                         )}
                         <div
                           className={classes.edit}
+                          onClick={this.handleTodoEdit.bind(this, todo)}
                         >
                           <span className={classes.hoverPointer}>Edit</span>
                         </div>
                       </Typography>
+                    )}
+                    { this.state.todoEditSectionActive === todo.id && (
+                      <div className={classes.todoEditSection}>
+                        <input
+                          type="text"
+                          onChange={this.onNameChange}
+                          className={classes.input}
+                          value={this.state.name}
+                        />
+                        <Typography
+                          variant="body2"
+                          className={classes.submit}
+                          onClick={this.handleTodoEditSubmit.bind(this, todo)}
+                        >
+                          Save
+                        </Typography>
+                      </div>
                     )}
                   </Paper>
                 </Grid>
@@ -227,7 +281,7 @@ class TodosPage extends Component {
           <Grid item xs={4}>
             <Paper className={classes.todoWrapper}>
               <div className={classes.center}>
-                { !this.state.todoSectionActive && (
+                { !this.state.todoNewSectionActive && (
                   <div
                     className={classes.addTaskWrapper}
                     onClick={this.handleShowTodoSection}
@@ -236,7 +290,7 @@ class TodosPage extends Component {
                     <span className={classes.addTask}>Add task</span>
                   </div>
                 )}
-                { this.state.todoSectionActive && (
+                { this.state.todoNewSectionActive && (
                   <div className={classes.center}>
                     <input
                       type="text"
