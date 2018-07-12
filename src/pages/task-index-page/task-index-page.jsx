@@ -45,7 +45,10 @@ class TaskIndexPage extends Component {
   }
 
   handleShowCreateSection() {
-    this.setState({ newTaskSectionActive: true });
+    this.setState({
+      editTaskSectionActive: undefined,
+      newTaskSectionActive: true,
+    });
   }
   
   handleOnCreateSubmit() {
@@ -59,7 +62,10 @@ class TaskIndexPage extends Component {
   }
 
   handleOnEditSubmit(todo) {
-    this.setState({ editTaskSectionActive: false });
+    this.setState({
+      hoverTaskSectionActive: undefined,
+      editTaskSectionActive: false,
+    });
     const updatedTodo = {
       ...todo,
       name: this.state.name,
@@ -91,7 +97,6 @@ class TaskIndexPage extends Component {
   }
 
   handleOnEdit(todo) {
-    this.setState({ editTaskSectionActive: true });
     this.setState({
       newTaskSectionActive: false,
       name: todo.name,
@@ -115,7 +120,7 @@ class TaskIndexPage extends Component {
           { todos &&
             todos.map(todo => {
               return (
-                <Grid item xs={4} key={todo.id}>
+                <Grid item xs={6} sm={4} key={todo.id}>
                   <Paper
                     className={classes.taskWrapperStyle}
                     onMouseEnter={this.handleOnMouseEnter.bind(this, todo.id)}
@@ -140,7 +145,7 @@ class TaskIndexPage extends Component {
               )
             })
           }
-          <Grid item xs={4}>
+          <Grid item xs={6} sm={4}>
             <Paper className={classes.taskWrapperStyle}>
               <TaskCreateSection
                 active={this.state.newTaskSectionActive}

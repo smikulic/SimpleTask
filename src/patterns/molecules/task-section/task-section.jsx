@@ -11,6 +11,9 @@ const styles = theme => ({
     marginBottom: '0.5rem',
     color: textColor,
     fontWeight: '600',
+    textOverflow: 'ellipsis',
+    overflow: 'hidden',
+    whiteSpace: 'nowrap',
   },
   completedStatusStyle: {
     color: secondaryColor,

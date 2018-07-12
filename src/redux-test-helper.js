@@ -10,7 +10,7 @@ export const todoMock = {
 
 export const todoMock2 = {
   id: '2',
-  name: 'Task two',
+  name: 'Extremely long task two name',
   completed: true,
 };
 
